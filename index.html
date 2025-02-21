@@ -4,55 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URL Shortener | Fast & Free</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
         :root {
-            --bg-dark: #0a0a0a;
-            --text-glow: #0ff;
-            --btn-color: #ffcc00;
-            --glass: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.12);
             --border-glass: rgba(255, 255, 255, 0.3);
+            --focus-color: #ff00ff;
+            --btn-color: #ffcc00;
+            --text-light: #f0f0f0;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a, #1a1a2e, #0a0a0a);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             text-align: center;
             margin: 0;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            overflow-x: hidden;
             padding: 20px;
-            background: linear-gradient(135deg, #0a0a0a, #1c1c1c);
-            color: white;
         }
 
-        .container, .about, .questions {
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .social-icons {
+            font-size: 24px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ffcc00;
+        }
+
+        /* Main Container */
+        .container {
             max-width: 500px;
-            margin: auto;
-            padding: 25px;
+            margin: 100px auto 30px;
+            padding: 20px;
             border-radius: 15px;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(12px);
             background: var(--glass);
             border: 1px solid var(--border-glass);
-            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
-            animation: fadeIn 0.8s ease-in-out;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
         input {
-            width: 85%;
+            width: 90%;
             padding: 12px;
             margin: 10px 0;
-            border: 2px solid var(--text-glow);
+            border: 2px solid white;
             border-radius: 10px;
             outline: none;
             background: transparent;
-            color: white;
+            color: var(--text-light);
             font-size: 16px;
-            transition: all 0.3s ease-in-out;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         input:focus {
-            border-color: var(--btn-color);
-            box-shadow: 0 0 10px var(--btn-color);
+            border-color: var(--focus-color);
+            box-shadow: 0 0 15px var(--focus-color);
         }
 
         button {
@@ -64,43 +103,33 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease-in-out;
+            margin-top: 5px;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         button:hover {
             background: white;
-            color: black;
             transform: scale(1.05);
         }
 
         #timer {
             font-size: 18px;
-            color: var(--text-glow);
             font-weight: bold;
         }
 
         #result-container {
             display: none;
             margin-top: 10px;
-            animation: fadeIn 0.8s ease-in-out;
         }
 
-        .copy-btn {
-            background: var(--text-glow);
-            color: black;
-            font-size: 14px;
-            padding: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            margin-left: 10px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .copy-btn:hover {
-            background: white;
-            transform: scale(1.05);
+        /* About Us */
+        .about, .questions, .follow-us {
+            max-width: 700px;
+            margin: 50px auto;
+            text-align: left;
+            padding: 20px;
+            background: var(--glass);
+            border-radius: 10px;
         }
 
         .question {
@@ -108,26 +137,27 @@
             padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
-            border: 1px solid var(--border-glass);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .question:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
         }
 
         .question h3 {
-            color: var(--btn-color);
+            color: #ffcc00;
         }
 
-        .question p {
-            color: #ddd;
+        /* Follow Us */
+        .follow-us {
+            text-align: center;
         }
 
-        .about h2, .questions h2 {
-            color: var(--btn-color);
+        .follow-icons a {
+            font-size: 24px;
+            margin: 10px;
+            color: white;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .follow-icons a:hover {
+            color: #ffcc00;
+            transform: scale(1.2);
         }
 
         footer {
@@ -135,15 +165,20 @@
             padding: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            text-align: center;
         }
     </style>
 </head>
 <body>
+
+    <div class="navbar">
+        <h1>🔗 URL Shortener</h1>
+        <div class="social-icons">
+            <a href="https://instagram.com/yourprofile" target="_blank">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
+    </div>
 
     <div class="container">
         <h2>🔗 Shorten Your Link</h2>
@@ -158,51 +193,71 @@
     </div>
 
     <div class="about">
-        <h2>📌 About Us</h2>
-        <p>We provide a **fast, free, and secure** URL shortening service. Our goal is to make link sharing **simple and efficient**, whether for **social media, business, or personal use**. Try it now and experience hassle-free link management!</p>
+        <h2>About Us</h2>
+        <p>We provide a **fast, free, and simple URL shortening** service. Share long links in a shorter and cleaner way with our tool.</p>
     </div>
 
     <div class="questions">
         <h2>❓ Frequently Asked Questions</h2>
 
         <div class="question"><h3>1. What is a URL shortener?</h3><p>A tool that converts long URLs into short, manageable links.</p></div>
-        <div class="question"><h3>2. Can I shorten very long URLs?</h3><p>Yes, our tool supports any URL, no matter how long.</p></div>
-        <div class="question"><h3>3. Do short links expire?</h3><p>No, links created are permanent unless removed manually.</p></div>
-        <div class="question"><h3>4. Is this service free?</h3><p>Yes, our URL shortener is 100% free to use.</p></div>
-        <div class="question"><h3>5. Can I track link clicks?</h3><p>No, but you can use a service like Bitly for tracking.</p></div>
-        <div class="question"><h3>6. Are my links safe?</h3><p>Yes! We prevent spam and phishing attempts.</p></div>
-        <div class="question"><h3>7. Can I use custom short links?</h3><p>Not yet, but we plan to add this feature soon.</p></div>
-        <div class="question"><h3>8. What websites are supported?</h3><p>You can shorten **any** valid URL, including long media and file links.</p></div>
-        <div class="question"><h3>9. Can I share my short links anywhere?</h3><p>Yes! Use them on social media, WhatsApp, emails, and more.</p></div>
-        <div class="question"><h3>10. Is there a limit to how many links I can shorten?</h3><p>Nope! You can shorten as many links as you want for free.</p></div>
+        <div class="question"><h3>2. Is it free?</h3><p>Yes! Our URL shortener is completely free.</p></div>
+        <div class="question"><h3>3. Can I track my short links?</h3><p>Some shorteners allow tracking through analytics.</p></div>
+
+    </div>
+
+    <div class="follow-us">
+        <h2>📲 Follow Us</h2>
+        <div class="follow-icons">
+            <a href="https://www.instagram.com/aarya_sharma_48?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.instagram.com/aarya_sharma_48?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.instagram.com/aarya_sharma_48?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+        </div>
     </div>
 
     <footer>© 2025 | Built with ❤️ for easy link sharing</footer>
 
-    <script>
-        async function shortenUrl() {
-            let longUrl = document.getElementById("longUrl").value.trim();
-            const resultElement = document.getElementById("result");
-            const resultContainer = document.getElementById("result-container");
+  <script>
+    async function shortenUrl() {
+        let longUrl = document.getElementById("longUrl").value.trim();
+        const resultElement = document.getElementById("result");
+        const resultContainer = document.getElementById("result-container");
+        const timerElement = document.getElementById("timer");
 
-            if (!longUrl) return alert("Please enter a URL!");
+        if (!longUrl) {
+            resultElement.innerHTML = "❌ Please enter a URL!";
+            resultContainer.style.display = "none";
+            return;
+        }
 
-            try {
-                const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`;
-                const response = await fetch(apiUrl);
-                const shortUrl = await response.text();
-                resultElement.innerHTML = `<a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
-                resultContainer.style.display = "block";
-            } catch {
-                resultElement.innerHTML = "❌ Error shortening URL!";
+        // Start 3s Countdown
+        let countdown = 3;
+        timerElement.innerHTML = `Generating link in ${countdown} seconds...`;
+        
+        const interval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                timerElement.innerHTML = `Generating link in ${countdown} seconds...`;
+            } else {
+                clearInterval(interval);
+                timerElement.innerHTML = "Generating link...";
             }
-        }
+        }, 1000);
 
-        function copyLink() {
-            navigator.clipboard.writeText(document.querySelector("#result a").textContent);
-            alert("Copied to clipboard!");
-        }
-    </script>
-
+        // Fetch Short Link after 3s
+        setTimeout(async () => {
+            try {
+                const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
+                const shortUrl = await response.text();
+                resultElement.innerHTML = `Shortened Link: <a href="${shortUrl}" target="_blank" id="shortUrl">${shortUrl}</a>`;
+                resultContainer.style.display = "block";
+                timerElement.innerHTML = "";
+            } catch (error) {
+                resultElement.innerHTML = "❌ Error shortening URL!";
+                resultContainer.style.display = "none";
+            }
+        }, 3000);
+    }
+</script>
 </body>
 </html>
