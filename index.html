@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener | Fast & Free</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --text-dark: #0ff;
+            --btn-dark: #ff0;
+            --glass: rgba(255, 255, 255, 0.2);
+            --border-glass: rgba(255, 255, 255, 0.4);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background: linear-gradient(135deg, #1e1e1e, #252525);
+            color: white;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid white;
+            border-radius: 10px;
+            outline: none;
+            background: transparent;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            width: 90%;
+            padding: 12px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: white;
+            color: black;
+        }
+
+        #timer {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+        }
+
+        #result-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .copy-btn {
+            background: #0ff;
+            color: black;
+            font-size: 14px;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #fff;
+        }
+
+        .questions {
+            margin-top: 40px;
+            max-width: 700px;
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .question {
+            background: var(--glass);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(5px);
+        }
+
+        .question h3 {
+            color: #ffcc00;
+        }
+
+        .question p {
+            color: #ddd;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🔗 Shorten Your Link</h2>
+        <input type="text" id="longUrl" placeholder="Enter URL here..." required>
+        <button onclick="shortenUrl()">Shorten</button>
+        <p id="timer"></p>
+
+        <div id="result-container">
+            <p id="result"></p>
+            <button class="copy-btn" onclick="copyLink()">Copy</button>
+        </div>
+    </div>
+
+    <div class="questions">
+        <h2>❓ Frequently Asked Questions</h2>
+
+        <div class="question"><h3>1. What is a URL shortener?</h3><p>A tool that converts long URLs into short, manageable links.</p></div>
+        <div class="question"><h3>2. Why should I use short URLs?</h3><p>Short URLs are easy to share, track, and manage.</p></div>
+        <div class="question"><h3>3. How does a URL shortener work?</h3><p>It creates a unique alias that redirects to the original URL.</p></div>
+        <div class="question"><h3>4. Can I track who clicks my short link?</h3><p>Yes, many services provide analytics for tracking clicks.</p></div>
+        <div class="question"><h3>5. Are short links safe?</h3><p>Most services have spam detection to prevent malicious use.</p></div>
+        <div class="question"><h3>6. Can I create a custom short link?</h3><p>Yes, some services allow you to choose a custom alias.</p></div>
+        <div class="question"><h3>7. Do short links expire?</h3><p>It depends on the service; some links are permanent, while others expire.</p></div>
+        <div class="question"><h3>8. Is URL shortening free?</h3><p>Most basic services are free, but advanced features may require payment.</p></div>
+        <div class="question"><h3>9. How can I monetize short links?</h3><p>Some platforms pay users for clicks on their short links.</p></div>
+        <div class="question"><h3>10. Can I shorten multiple links at once?</h3><p>Some tools allow batch URL shortening.</p></div>
+
+    </div>
+
+    <footer>© 2025 | Built with ❤️ for easy link sharing</footer>
+
+    <script>
+        function isValidUrl(url) {
+            const pattern = /^(https?:\/\/)?([\w-]+\.[a-z]{2,})(\/[\w-./?%&=]*)?$/i;
+            return pattern.test(url);
+        }
+
+        async function shortenUrl() {
+            let longUrl = document.getElementById("longUrl").value.trim();
+            const resultElement = document.getElementById("result");
+            const resultContainer = document.getElementById("result-container");
+            const timerElement = document.getElementById("timer");
+
+            if (!isValidUrl(longUrl)) {
+                resultElement.innerHTML = "❌ Invalid URL! Make sure it includes a domain (e.g., .com, .in, .net).";
+                resultContainer.style.display = "none";
+                return;
+            }
+
+            if (!longUrl.startsWith("http://") && !longUrl.startsWith("https://")) {
+                longUrl = "https://" + longUrl;
+            }
+
+            timerElement.innerHTML = "Generating link in 5 seconds...";
+            let countdown = 5;
+            const interval = setInterval(() => {
+                countdown--;
+                timerElement.innerHTML = `Generating link in ${countdown} seconds...`;
+                if (countdown === 0) {
+                    clearInterval(interval);
+                    timerElement.innerHTML = "Generating link...";
+                }
+            }, 1000);
+
+            setTimeout(async () => {
+                try {
+                    const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`;
+                    const response = await fetch(apiUrl);
+                    const shortUrl = await response.text();
+                    resultElement.innerHTML = `Shortened Link: <a href="${shortUrl}" target="_blank" id="shortUrl">${shortUrl}</a>`;
+                    timerElement.innerHTML = "";
+                    resultContainer.style.display = "block";
+                } catch (error) {
+                    resultElement.innerHTML = "❌ Error shortening URL!";
+                    resultContainer.style.display = "none";
+                }
+            }, 5000);
+        }
+
+        function copyLink() {
+            const shortUrl = document.getElementById("shortUrl").textContent;
+            navigator.clipboard.writeText(shortUrl).then(() => alert("Copied to clipboard!"));
+        }
+    </script>
+
+</body>
+</html>
