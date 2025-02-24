@@ -2,22 +2,25 @@
   "name": "QuickLink",
   "short_name": "QuickLink",
   "start_url": "./index.html",
-  "display": "fullscreen",
+  "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#0a0a0a",
   "background_color": "#0a0a0a",
   "icons": [
     {
       "src": "https://ik.imagekit.io/rsmeguisr/QuickLink_App_Icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "https://ik.imagekit.io/rsmeguisr/QuickLink_App_Icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "splash_screens": [
+  "screenshots": [
     {
       "src": "https://ik.imagekit.io/rsmeguisr/QuickLink_Splash_Screen_1500x2688.png?updatedAt=1740367173464",
       "sizes": "1500x2688",
