@@ -197,21 +197,30 @@
                 return;
             }
 
-            timerElement.innerHTML = "Generating link in 3 seconds...";
-            setTimeout(async () => {
-                const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
-                const shortUrl = await response.text();
-
-                if (shortUrl.includes("http")) {
-                    resultElement.innerHTML = `Shortened Link: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
-                    resultContainer.style.display = "block";
+            let count = 3;
+            timerElement.innerHTML = `Generating link in ${count}...`;
+            
+            let countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    timerElement.innerHTML = `Generating link in ${count}...`;
                 } else {
-                    resultElement.innerHTML = "❌ Error shortening URL!";
-                    resultContainer.style.display = "none";
-                }
+                    clearInterval(countdownInterval);
+                    timerElement.innerHTML = "";
 
-                timerElement.innerHTML = "";
-            }, 3000);
+                    fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`)
+                    .then(response => response.text())
+                    .then(shortUrl => {
+                        if (shortUrl.includes("http")) {
+                            resultElement.innerHTML = `Shortened Link: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+                            resultContainer.style.display = "block";
+                        } else {
+                            resultElement.innerHTML = "❌ Error shortening URL!";
+                            resultContainer.style.display = "none";
+                        }
+                    });
+                }
+            }, 1000);
         }
 
         function copyLink() {
