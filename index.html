@@ -224,10 +224,14 @@
         }
 
         function copyLink() {
-            let shortUrl = document.querySelector("#result a").innerText;
-            navigator.clipboard.writeText(shortUrl).then(() => alert("Copied!"));
+            let shortUrl = document.querySelector("#result a")?.innerText;
+            if (shortUrl) {
+                navigator.clipboard.writeText(shortUrl).then(() => alert("Link copied to clipboard!"));
+            } else {
+                alert("No valid link to copy!");
+            }
         }
     </script>
 
 </body>
-</html>
+    </html>
